@@ -24,9 +24,9 @@ const Navbar = ({ onApply }: { onApply: () => void }) => (
         KINETIC_ROOM
       </div>
       <div className="hidden md:flex items-center gap-8">
-        <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-sm" href="#expertise">Architecture</a>
-        <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-sm" href="#technology">The Council</a>
-        <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-sm" href="#openFloor">The Network</a>
+        <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-xs" href="#expertise">ARCHITECTURE</a>
+        <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-xs" href="#technology">THE COUNCIL</a>
+        <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-xs" href="#openFloor">THE NETWORK</a>
       </div>
       <div className="flex items-center gap-4">
         <button 
@@ -84,35 +84,39 @@ const Hero = () => (
           <div className="relative bg-surface-container-low p-1 rounded-xl border border-outline-variant/10 overflow-hidden group">
             <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-tertiary/20 blur-2xl group-hover:opacity-100 transition duration-1000 opacity-50"></div>
             <div className="relative bg-surface-container-lowest rounded-lg p-8">
-              <div className="flex justify-between items-center mb-12">
-                <span className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Terminal Interface</span>
-                <div className="flex gap-1">
-                  <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
-                  <div className="h-1.5 w-1.5 rounded-full bg-outline-variant/20"></div>
-                  <div className="h-1.5 w-1.5 rounded-full bg-outline-variant/20"></div>
-                </div>
-              </div>
               <div className="space-y-8">
                 <div className="flex justify-between items-end">
-                  <div className="w-1/2">
-                    <div className="h-2 w-full bg-outline-variant/10 mb-2 rounded-full overflow-hidden">
-                      <div className="h-full w-2/3 bg-primary animate-pulse"></div>
+                  <div className="w-full">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-[10px] font-mono text-primary uppercase tracking-widest">NQ1! / NASDAQ FUTURES</span>
+                      <span className="text-[10px] font-mono text-tertiary uppercase tracking-widest">MOMENTUM_ENGINE v4.2</span>
                     </div>
-                    <div className="h-2 w-2/3 bg-outline-variant/10 rounded-full"></div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-headline font-bold text-primary tracking-tighter">V.042</p>
+                    <div className="h-[2px] w-full bg-outline-variant/10 rounded-full overflow-hidden">
+                      <div className="h-full w-4/5 bg-primary animate-pulse"></div>
+                    </div>
                   </div>
                 </div>
-                {/* Simplified Abstract Chart */}
-                <div className="h-32 flex items-end gap-2 px-2 border-l border-b border-outline-variant/10">
-                  {[40, 70, 45, 90, 65, 80, 50, 95].map((h, i) => (
-                    <div 
-                      key={i} 
-                      className="flex-1 bg-primary/20 hover:bg-primary/40 transition-colors rounded-t-sm" 
-                      style={{ height: `${h}%` }}
-                    />
-                  ))}
+                {/* Nasdaq Futures Chart Suggestion */}
+                <div className="relative h-48 w-full border-l border-b border-outline-variant/10 px-4 flex flex-col justify-end gap-1 group/chart">
+                  <div className="absolute inset-0 flex flex-col justify-between py-4 opacity-5">
+                    {[1, 2, 3, 4].map(i => <div key={i} className="h-[1px] w-full bg-white"></div>)}
+                  </div>
+                  <div className="flex items-end gap-1 h-3/4">
+                    {/* Simulated Candlesticks */}
+                    {[50, 60, 45, 70, 55, 85, 75, 95, 80, 100, 90, 85].map((h, i) => (
+                      <div key={i} className="flex-1 flex flex-col items-center justify-end h-full gap-[2px]">
+                        <div className="w-[1px] h-4 bg-primary/40 group-hover/chart:bg-primary transition-colors"></div>
+                        <div 
+                          className={`w-full ${i > 8 ? 'bg-primary' : i % 3 === 0 ? 'bg-error' : 'bg-primary/60'} rounded-sm border border-white/5`} 
+                          style={{ height: `${h}%` }}
+                        ></div>
+                        <div className="w-[1px] h-3 bg-primary/40 group-hover/chart:bg-primary transition-colors"></div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="absolute bottom-2 right-2 text-[10px] font-mono text-primary/50 uppercase tracking-tighter">
+                    Price Action: Aggressive Accumulation
+                  </div>
                 </div>
               </div>
             </div>
