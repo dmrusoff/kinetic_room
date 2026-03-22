@@ -91,108 +91,55 @@ const Hero = () => (
           <div className="relative bg-surface-container-low p-1 rounded-xl border border-outline-variant/10 overflow-hidden group">
             <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-tertiary/20 blur-2xl group-hover:opacity-100 transition duration-1000 opacity-50"></div>
             <div className="relative bg-[#0d0d0d] rounded-lg overflow-hidden">
-              {/* Chart Header */}
-              <div className="flex items-center justify-between px-4 py-2 border-b border-white/5">
-                <div className="flex items-center gap-3">
-                  <span className="text-[10px] font-mono text-primary font-bold uppercase tracking-widest">NQ1!</span>
-                  <span className="text-[10px] font-mono text-on-surface-variant/60">NASDAQ 100 FUTURES</span>
-                  <span className="text-[10px] font-mono text-primary">▲ +142.75 <span className="text-on-surface-variant/40">(+0.78%)</span></span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-[9px] font-mono text-on-surface-variant/40 uppercase">1H · CME</span>
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
-                  </span>
-                </div>
-              </div>
-              {/* Main Chart + Price Axis */}
-              <div className="flex">
-                <div className="relative flex-1 h-52">
-                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 320 160" preserveAspectRatio="none">
-                    {/* Grid */}
-                    {[32,64,96,128].map(y => <line key={y} x1="0" y1={y} x2="320" y2={y} stroke="rgba(255,255,255,0.04)" strokeWidth="1"/>)}
-                    {[64,128,192,256].map(x => <line key={x} x1={x} y1="0" x2={x} y2="160" stroke="rgba(255,255,255,0.04)" strokeWidth="1"/>)}
-                    {/* EMA 20 */}
-                    <polyline fill="none" stroke="rgba(52,254,160,0.55)" strokeWidth="1.2"
-                      points="0,118 16,114 32,120 48,110 64,104 80,108 96,92 112,86 128,82 144,88 160,76 176,68 192,62 208,57 224,60 240,52 256,46 272,42 288,40 304,36 320,31"/>
-                    {/* EMA 50 */}
-                    <polyline fill="none" stroke="rgba(185,132,255,0.35)" strokeWidth="1" strokeDasharray="3 2"
-                      points="0,128 16,125 32,122 48,118 64,113 80,110 96,103 112,97 128,93 144,95 160,87 176,80 192,74 208,70 224,72 240,64 256,58 272,54 288,50 304,47 320,44"/>
-                    {/* Candlesticks */}
-                    {([
-                      [8,  118,108,123,104],
-                      [24, 108,115,119,106],
-                      [40, 115,104,121,101],
-                      [56, 104,112,115,100],
-                      [72, 112,100,117, 97],
-                      [88, 100,111,113, 96],
-                      [104,111,119,123,109],
-                      [120,119,108,125,105],
-                      [136,108,121,124,106],
-                      [152,121,113,127,111],
-                      [168,113,126,129,111],
-                      [184,126,118,131,116],
-                      [200,118,129,133,116],
-                      [216,129,123,135,121],
-                      [232,123,133,137,121],
-                      [248,133,127,138,124],
-                      [264,127,139,143,125],
-                      [280,139,131,145,129],
-                      [296,131,143,147,129],
-                      [312,143,137,149,133],
-                    ] as [number,number,number,number,number][]).map(([x,o,c,h,l], i) => {
-                      const up = c >= o;
-                      const col = up ? "rgba(52,254,160,0.9)" : "rgba(255,72,72,0.9)";
-                      return (
-                        <g key={i}>
-                          <line x1={x} y1={h} x2={x} y2={l} stroke={col} strokeWidth="0.9" opacity="0.65"/>
-                          <rect x={x-3.5} y={Math.min(o,c)} width="7" height={Math.max(Math.abs(c-o),1.2)}
-                            fill={up ? col : "none"} stroke={col} strokeWidth="0.9" opacity={up ? "0.85" : "1"}/>
-                        </g>
-                      );
-                    })}
-                    {/* Last price line */}
-                    <line x1="275" y1="137" x2="320" y2="137" stroke="rgba(52,254,160,0.25)" strokeWidth="0.7" strokeDasharray="2 2"/>
-                  </svg>
-                </div>
-                {/* Price Axis */}
-                <div className="w-14 shrink-0 h-52 border-l border-white/5 bg-black/40 flex flex-col justify-between py-2 px-1.5 relative">
-                  {["18,480","18,440","18,400","18,360","18,320"].map((p, i) => (
-                    <span key={i} className={`text-[8px] font-mono text-right block ${i===2 ? "text-primary font-bold" : "text-on-surface-variant/35"}`}>{p}</span>
-                  ))}
-                  <div className="absolute left-0 right-0 bg-primary text-background text-[8px] font-mono font-bold text-center py-[2px]" style={{top:"66%"}}>
-                    18,428
+              {/* Chart Header Overlay (Floating) */}
+              <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-[2px]">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-mono text-primary font-black uppercase tracking-widest">NQ1!</span>
+                    <span className="text-[10px] font-mono text-white/50 font-medium">NASDAQ_TERMINAL</span>
+                  </div>
+                  <div className="h-4 w-[1px] bg-white/10 hidden sm:block"></div>
+                  <div className="hidden sm:flex items-center gap-3">
+                    <span className="text-[10px] font-mono text-primary animate-pulse">● LIVE_FEED</span>
+                    <span className="text-[10px] font-mono text-white/30 uppercase tracking-tighter">MOMENTUM_ENGINE v4.2</span>
                   </div>
                 </div>
-              </div>
-              {/* Volume panel */}
-              <div className="flex border-t border-white/5">
-                <div className="flex-1 h-9 flex items-end px-1 gap-[2px]">
-                  {[28,42,18,55,38,62,72,35,58,80,44,67,50,76,60,88,45,70,90,55].map((h, i) => (
-                    <div key={i} className={`flex-1 rounded-t-[1px] ${[1,1,0,1,0,1,1,0,1,1,0,1,1,1,0,1,0,1,1,0][i] ? "bg-primary/35" : "bg-red-500/25"}`} style={{height:`${h}%`}}/>
-                  ))}
-                </div>
-                <div className="w-14 border-l border-white/5 flex items-center justify-center">
-                  <span className="text-[7px] font-mono text-on-surface-variant/25 uppercase">Vol</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono text-white/40 uppercase">1H_INTERVAL</span>
                 </div>
               </div>
-              {/* Time axis */}
-              <div className="flex border-t border-white/5">
-                <div className="flex-1 flex justify-between px-3 py-1">
-                  {["09:00","10:00","11:00","12:00","13:00"].map(t => (
-                    <span key={t} className="text-[7px] font-mono text-on-surface-variant/25">{t}</span>
-                  ))}
+
+              {/* Real Chart Image */}
+              <div className="relative aspect-video w-full overflow-hidden">
+                <img 
+                  src="/nasdaq_real_chart.png" 
+                  alt="Nasdaq Futures Terminal" 
+                  className="w-full h-full object-cover scale-[1.02] hover:scale-100 transition-transform duration-[2000ms] grayscale-[0.2] contrast-[1.1]"
+                />
+                
+                {/* Visual Polish Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none"></div>
+                <div className="absolute inset-0 ring-1 ring-inset ring-white/5 pointer-events-none"></div>
+                
+                {/* Data HUD (Bottom Floating) */}
+                <div className="absolute bottom-4 left-4 right-4 z-10 flex items-center gap-6 px-4 py-2 bg-black/60 backdrop-blur-md rounded border border-white/5 transition-opacity group-hover:opacity-100 opacity-80">
+                  <div className="flex flex-col">
+                    <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">Sentiment</span>
+                    <span className="text-[10px] font-mono text-primary font-bold uppercase">Strong_Long</span>
+                  </div>
+                  <div className="h-6 w-[1px] bg-white/10"></div>
+                  <div className="flex flex-col">
+                    <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">Alpha_Prob</span>
+                    <span className="text-[10px] font-mono text-secondary font-bold uppercase">84.2%</span>
+                  </div>
+                  <div className="h-6 w-[1px] bg-white/10"></div>
+                  <div className="flex flex-col flex-1">
+                    <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">Liquidity_Void</span>
+                    <div className="h-1.5 w-full bg-white/5 rounded-full mt-1 overflow-hidden">
+                      <div className="h-full w-[72%] bg-gradient-to-r from-primary to-primary-container"></div>
+                    </div>
+                  </div>
                 </div>
-                <div className="w-14"/>
-              </div>
-              {/* OHLC footer */}
-              <div className="flex items-center gap-3 px-4 py-1.5 border-t border-white/5 bg-black/30">
-                <span className="text-[8px] font-mono text-on-surface-variant/40">O:<span className="text-white/60 ml-0.5">18,412</span></span>
-                <span className="text-[8px] font-mono text-on-surface-variant/40">H:<span className="text-primary ml-0.5">18,480</span></span>
-                <span className="text-[8px] font-mono text-on-surface-variant/40">L:<span className="text-red-400 ml-0.5">18,402</span></span>
-                <span className="text-[8px] font-mono text-on-surface-variant/40">C:<span className="text-primary font-bold ml-0.5">18,428</span></span>
-                <span className="ml-auto text-[7px] font-mono text-tertiary/50 uppercase tracking-widest">MOMENTUM_ENGINE v4.2</span>
               </div>
             </div>
           </div>
