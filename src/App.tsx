@@ -90,116 +90,109 @@ const Hero = () => (
         >
           <div className="relative bg-surface-container-low p-1 rounded-xl border border-outline-variant/10 overflow-hidden group">
             <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-tertiary/20 blur-2xl group-hover:opacity-100 transition duration-1000 opacity-50"></div>
-            <div className="relative bg-surface-container-lowest rounded-lg p-8">
-              <div className="space-y-8">
-                <div className="flex justify-between items-end">
-                  <div className="w-full">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-[10px] font-mono text-primary uppercase tracking-widest">NQ1! / NASDAQ FUTURES</span>
-                      <span className="text-[10px] font-mono text-tertiary uppercase tracking-widest">MOMENTUM_ENGINE v4.2</span>
-                    </div>
-                    <div className="h-[2px] w-full bg-outline-variant/10 rounded-full overflow-hidden">
-                      <div className="h-full w-4/5 bg-primary animate-pulse"></div>
-                    </div>
-                  </div>
+            <div className="relative bg-[#0d0d0d] rounded-lg overflow-hidden">
+              {/* Chart Header */}
+              <div className="flex items-center justify-between px-4 py-2 border-b border-white/5">
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-mono text-primary font-bold uppercase tracking-widest">NQ1!</span>
+                  <span className="text-[10px] font-mono text-on-surface-variant/60">NASDAQ 100 FUTURES</span>
+                  <span className="text-[10px] font-mono text-primary">▲ +142.75 <span className="text-on-surface-variant/40">(+0.78%)</span></span>
                 </div>
-                {/* Realistic Nasdaq Futures Chart */}
-                <div className="relative h-64 w-full bg-[#0a0a0a] rounded border border-outline-variant/10 overflow-hidden group/chart">
-                  {/* Grid Lines */}
-                  <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 opacity-10 pointer-events-none">
-                    {Array.from({ length: 36 }).map((_, i) => (
-                      <div key={i} className="border-[0.5px] border-white/40"></div>
-                    ))}
-                  </div>
-
-                  {/* Price Axis (Right) */}
-                  <div className="absolute right-0 top-0 bottom-0 w-12 border-l border-white/5 bg-black/40 flex flex-col justify-between py-4 px-1 text-[8px] font-mono text-on-surface-variant/60 z-20">
-                    <span>18,480.00</span>
-                    <span>18,420.00</span>
-                    <span>18,360.00</span>
-                    <span>18,300.00</span>
-                    <span>18,240.00</span>
-                  </div>
-
-                  {/* Chart Area */}
-                  <svg className="absolute inset-0 w-[calc(100%-48px)] h-full p-4 overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
-                    {/* EMA Curves (Decorative) */}
-                    <path 
-                      d="M 0 60 Q 25 45, 50 55 T 100 30" 
-                      fill="none" 
-                      stroke="rgba(52, 254, 160, 0.4)" 
-                      strokeWidth="0.5" 
-                      className="animate-pulse"
-                    />
-                    <path 
-                      d="M 0 70 Q 30 50, 60 65 T 100 45" 
-                      fill="none" 
-                      stroke="rgba(185, 132, 255, 0.3)" 
-                      strokeWidth="0.5" 
-                    />
-
+                <div className="flex items-center gap-3">
+                  <span className="text-[9px] font-mono text-on-surface-variant/40 uppercase">1H · CME</span>
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
+                  </span>
+                </div>
+              </div>
+              {/* Main Chart + Price Axis */}
+              <div className="flex">
+                <div className="relative flex-1 h-52">
+                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 320 160" preserveAspectRatio="none">
+                    {/* Grid */}
+                    {[32,64,96,128].map(y => <line key={y} x1="0" y1={y} x2="320" y2={y} stroke="rgba(255,255,255,0.04)" strokeWidth="1"/>)}
+                    {[64,128,192,256].map(x => <line key={x} x1={x} y1="0" x2={x} y2="160" stroke="rgba(255,255,255,0.04)" strokeWidth="1"/>)}
+                    {/* EMA 20 */}
+                    <polyline fill="none" stroke="rgba(52,254,160,0.55)" strokeWidth="1.2"
+                      points="0,118 16,114 32,120 48,110 64,104 80,108 96,92 112,86 128,82 144,88 160,76 176,68 192,62 208,57 224,60 240,52 256,46 272,42 288,40 304,36 320,31"/>
+                    {/* EMA 50 */}
+                    <polyline fill="none" stroke="rgba(185,132,255,0.35)" strokeWidth="1" strokeDasharray="3 2"
+                      points="0,128 16,125 32,122 48,118 64,113 80,110 96,103 112,97 128,93 144,95 160,87 176,80 192,74 208,70 224,72 240,64 256,58 272,54 288,50 304,47 320,44"/>
                     {/* Candlesticks */}
-                    {[
-                      { x: 5, open: 65, close: 55, high: 75, low: 50 },
-                      { x: 13, open: 55, close: 60, high: 65, low: 52 },
-                      { x: 21, open: 60, close: 45, high: 65, low: 40 },
-                      { x: 29, open: 45, close: 58, high: 62, low: 42 },
-                      { x: 37, open: 58, close: 52, high: 60, low: 50 },
-                      { x: 45, open: 52, close: 68, high: 72, low: 48 },
-                      { x: 53, open: 68, close: 75, high: 80, low: 65 },
-                      { x: 61, open: 75, close: 82, high: 85, low: 72 },
-                      { x: 69, open: 82, close: 78, high: 86, low: 75 },
-                      { x: 77, open: 78, close: 88, high: 92, low: 75 },
-                      { x: 85, open: 88, close: 95, high: 98, low: 85 },
-                      { x: 93, open: 95, close: 92, high: 97, low: 90 },
-                    ].map((c, i) => {
-                      const isUp = c.close >= c.open;
-                      const color = isUp ? "rgb(52, 254, 160)" : "rgb(255, 82, 82)";
+                    {([
+                      [8,  118,108,123,104],
+                      [24, 108,115,119,106],
+                      [40, 115,104,121,101],
+                      [56, 104,112,115,100],
+                      [72, 112,100,117, 97],
+                      [88, 100,111,113, 96],
+                      [104,111,119,123,109],
+                      [120,119,108,125,105],
+                      [136,108,121,124,106],
+                      [152,121,113,127,111],
+                      [168,113,126,129,111],
+                      [184,126,118,131,116],
+                      [200,118,129,133,116],
+                      [216,129,123,135,121],
+                      [232,123,133,137,121],
+                      [248,133,127,138,124],
+                      [264,127,139,143,125],
+                      [280,139,131,145,129],
+                      [296,131,143,147,129],
+                      [312,143,137,149,133],
+                    ] as [number,number,number,number,number][]).map(([x,o,c,h,l], i) => {
+                      const up = c >= o;
+                      const col = up ? "rgba(52,254,160,0.9)" : "rgba(255,72,72,0.9)";
                       return (
                         <g key={i}>
-                          {/* Wick */}
-                          <line 
-                            x1={c.x} y1={100 - c.high} 
-                            x2={c.x} y2={100 - c.low} 
-                            stroke={color} 
-                            strokeWidth="0.5" 
-                            opacity="0.6"
-                          />
-                          {/* Body */}
-                          <rect 
-                            x={c.x - 2} 
-                            y={100 - (isUp ? c.close : c.open)} 
-                            width="4" 
-                            height={Math.abs(c.close - c.open)} 
-                            fill={isUp ? color : "transparent"} 
-                            stroke={color} 
-                            strokeWidth="0.5"
-                            className="group-hover/chart:opacity-100 transition-opacity"
-                            opacity={isUp ? "0.8" : "1"}
-                          />
+                          <line x1={x} y1={h} x2={x} y2={l} stroke={col} strokeWidth="0.9" opacity="0.65"/>
+                          <rect x={x-3.5} y={Math.min(o,c)} width="7" height={Math.max(Math.abs(c-o),1.2)}
+                            fill={up ? col : "none"} stroke={col} strokeWidth="0.9" opacity={up ? "0.85" : "1"}/>
                         </g>
                       );
                     })}
+                    {/* Last price line */}
+                    <line x1="275" y1="137" x2="320" y2="137" stroke="rgba(52,254,160,0.25)" strokeWidth="0.7" strokeDasharray="2 2"/>
                   </svg>
-
-                  {/* Volume (Bottom) */}
-                  <div className="absolute left-0 right-12 bottom-0 h-12 flex items-end gap-[2px] px-4 pointer-events-none opacity-40">
-                    {[30, 45, 20, 60, 50, 35, 70, 85, 40, 65, 90, 75].map((h, i) => (
-                      <div 
-                        key={i} 
-                        className={`flex-1 ${i % 3 === 0 ? 'bg-error' : 'bg-primary'} rounded-t-[1px]`} 
-                        style={{ height: `${h}%` }}
-                      ></div>
-                    ))}
-                  </div>
-
-                  <div className="absolute top-2 left-2 flex gap-4 text-[9px] font-mono text-on-surface-variant/80 z-20 bg-black/40 p-1 rounded backdrop-blur-sm">
-                    <span className="text-primary font-bold">O: 18,412.25</span>
-                    <span>H: 18,435.50</span>
-                    <span>L: 18,402.00</span>
-                    <span className="text-primary">C: 18,428.75</span>
+                </div>
+                {/* Price Axis */}
+                <div className="w-14 shrink-0 h-52 border-l border-white/5 bg-black/40 flex flex-col justify-between py-2 px-1.5 relative">
+                  {["18,480","18,440","18,400","18,360","18,320"].map((p, i) => (
+                    <span key={i} className={`text-[8px] font-mono text-right block ${i===2 ? "text-primary font-bold" : "text-on-surface-variant/35"}`}>{p}</span>
+                  ))}
+                  <div className="absolute left-0 right-0 bg-primary text-background text-[8px] font-mono font-bold text-center py-[2px]" style={{top:"66%"}}>
+                    18,428
                   </div>
                 </div>
+              </div>
+              {/* Volume panel */}
+              <div className="flex border-t border-white/5">
+                <div className="flex-1 h-9 flex items-end px-1 gap-[2px]">
+                  {[28,42,18,55,38,62,72,35,58,80,44,67,50,76,60,88,45,70,90,55].map((h, i) => (
+                    <div key={i} className={`flex-1 rounded-t-[1px] ${[1,1,0,1,0,1,1,0,1,1,0,1,1,1,0,1,0,1,1,0][i] ? "bg-primary/35" : "bg-red-500/25"}`} style={{height:`${h}%`}}/>
+                  ))}
+                </div>
+                <div className="w-14 border-l border-white/5 flex items-center justify-center">
+                  <span className="text-[7px] font-mono text-on-surface-variant/25 uppercase">Vol</span>
+                </div>
+              </div>
+              {/* Time axis */}
+              <div className="flex border-t border-white/5">
+                <div className="flex-1 flex justify-between px-3 py-1">
+                  {["09:00","10:00","11:00","12:00","13:00"].map(t => (
+                    <span key={t} className="text-[7px] font-mono text-on-surface-variant/25">{t}</span>
+                  ))}
+                </div>
+                <div className="w-14"/>
+              </div>
+              {/* OHLC footer */}
+              <div className="flex items-center gap-3 px-4 py-1.5 border-t border-white/5 bg-black/30">
+                <span className="text-[8px] font-mono text-on-surface-variant/40">O:<span className="text-white/60 ml-0.5">18,412</span></span>
+                <span className="text-[8px] font-mono text-on-surface-variant/40">H:<span className="text-primary ml-0.5">18,480</span></span>
+                <span className="text-[8px] font-mono text-on-surface-variant/40">L:<span className="text-red-400 ml-0.5">18,402</span></span>
+                <span className="text-[8px] font-mono text-on-surface-variant/40">C:<span className="text-primary font-bold ml-0.5">18,428</span></span>
+                <span className="ml-auto text-[7px] font-mono text-tertiary/50 uppercase tracking-widest">MOMENTUM_ENGINE v4.2</span>
               </div>
             </div>
           </div>
