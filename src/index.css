@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-headline: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-label: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: #34fea0;
+  --color-primary-container: #0cef93;
+  --color-secondary: #b984ff;
+  --color-tertiary: #8ff5ff;
+  --color-background: #0e0e0e;
+  --color-surface: #0e0e0e;
+  --color-surface-container-low: #131313;
+  --color-surface-container: #1a1919;
+  --color-surface-container-high: #201f1f;
+  --color-surface-container-highest: #262626;
+  --color-on-surface: #ffffff;
+  --color-on-surface-variant: #adaaaa;
+  --color-outline-variant: #484847;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface font-body selection:bg-primary/30 selection:text-primary overflow-x-hidden;
+  }
+}
+
+@layer utilities {
+  .kinetic-grid {
+    background-image: linear-gradient(to right, #48484715 1px, transparent 1px),
+                      linear-gradient(to bottom, #48484715 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  
+  .glow-pulse {
+    box-shadow: 0 0 20px rgba(52, 254, 160, 0.2);
+  }
+}
