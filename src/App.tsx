@@ -96,26 +96,101 @@ const Hero = () => (
                     </div>
                   </div>
                 </div>
-                {/* Nasdaq Futures Chart Suggestion */}
-                <div className="relative h-48 w-full border-l border-b border-outline-variant/10 px-4 flex flex-col justify-end gap-1 group/chart">
-                  <div className="absolute inset-0 flex flex-col justify-between py-4 opacity-5">
-                    {[1, 2, 3, 4].map(i => <div key={i} className="h-[1px] w-full bg-white"></div>)}
-                  </div>
-                  <div className="flex items-end gap-1 h-3/4">
-                    {/* Simulated Candlesticks */}
-                    {[50, 60, 45, 70, 55, 85, 75, 95, 80, 100, 90, 85].map((h, i) => (
-                      <div key={i} className="flex-1 flex flex-col items-center justify-end h-full gap-[2px]">
-                        <div className="w-[1px] h-4 bg-primary/40 group-hover/chart:bg-primary transition-colors"></div>
-                        <div 
-                          className={`w-full ${i > 8 ? 'bg-primary' : i % 3 === 0 ? 'bg-error' : 'bg-primary/60'} rounded-sm border border-white/5`} 
-                          style={{ height: `${h}%` }}
-                        ></div>
-                        <div className="w-[1px] h-3 bg-primary/40 group-hover/chart:bg-primary transition-colors"></div>
-                      </div>
+                {/* Realistic Nasdaq Futures Chart */}
+                <div className="relative h-64 w-full bg-[#0a0a0a] rounded border border-outline-variant/10 overflow-hidden group/chart">
+                  {/* Grid Lines */}
+                  <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 opacity-10 pointer-events-none">
+                    {Array.from({ length: 36 }).map((_, i) => (
+                      <div key={i} className="border-[0.5px] border-white/40"></div>
                     ))}
                   </div>
-                  <div className="absolute bottom-2 right-2 text-[10px] font-mono text-primary/50 uppercase tracking-tighter">
-                    Price Action: Aggressive Accumulation
+
+                  {/* Price Axis (Right) */}
+                  <div className="absolute right-0 top-0 bottom-0 w-12 border-l border-white/5 bg-black/40 flex flex-col justify-between py-4 px-1 text-[8px] font-mono text-on-surface-variant/60 z-20">
+                    <span>18,480.00</span>
+                    <span>18,420.00</span>
+                    <span>18,360.00</span>
+                    <span>18,300.00</span>
+                    <span>18,240.00</span>
+                  </div>
+
+                  {/* Chart Area */}
+                  <svg className="absolute inset-0 w-[calc(100%-48px)] h-full p-4 overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    {/* EMA Curves (Decorative) */}
+                    <path 
+                      d="M 0 60 Q 25 45, 50 55 T 100 30" 
+                      fill="none" 
+                      stroke="rgba(52, 254, 160, 0.4)" 
+                      strokeWidth="0.5" 
+                      className="animate-pulse"
+                    />
+                    <path 
+                      d="M 0 70 Q 30 50, 60 65 T 100 45" 
+                      fill="none" 
+                      stroke="rgba(185, 132, 255, 0.3)" 
+                      strokeWidth="0.5" 
+                    />
+
+                    {/* Candlesticks */}
+                    {[
+                      { x: 5, open: 65, close: 55, high: 75, low: 50 },
+                      { x: 13, open: 55, close: 60, high: 65, low: 52 },
+                      { x: 21, open: 60, close: 45, high: 65, low: 40 },
+                      { x: 29, open: 45, close: 58, high: 62, low: 42 },
+                      { x: 37, open: 58, close: 52, high: 60, low: 50 },
+                      { x: 45, open: 52, close: 68, high: 72, low: 48 },
+                      { x: 53, open: 68, close: 75, high: 80, low: 65 },
+                      { x: 61, open: 75, close: 82, high: 85, low: 72 },
+                      { x: 69, open: 82, close: 78, high: 86, low: 75 },
+                      { x: 77, open: 78, close: 88, high: 92, low: 75 },
+                      { x: 85, open: 88, close: 95, high: 98, low: 85 },
+                      { x: 93, open: 95, close: 92, high: 97, low: 90 },
+                    ].map((c, i) => {
+                      const isUp = c.close >= c.open;
+                      const color = isUp ? "rgb(52, 254, 160)" : "rgb(255, 82, 82)";
+                      return (
+                        <g key={i}>
+                          {/* Wick */}
+                          <line 
+                            x1={c.x} y1={100 - c.high} 
+                            x2={c.x} y2={100 - c.low} 
+                            stroke={color} 
+                            strokeWidth="0.5" 
+                            opacity="0.6"
+                          />
+                          {/* Body */}
+                          <rect 
+                            x={c.x - 2} 
+                            y={100 - (isUp ? c.close : c.open)} 
+                            width="4" 
+                            height={Math.abs(c.close - c.open)} 
+                            fill={isUp ? color : "transparent"} 
+                            stroke={color} 
+                            strokeWidth="0.5"
+                            className="group-hover/chart:opacity-100 transition-opacity"
+                            opacity={isUp ? "0.8" : "1"}
+                          />
+                        </g>
+                      );
+                    })}
+                  </svg>
+
+                  {/* Volume (Bottom) */}
+                  <div className="absolute left-0 right-12 bottom-0 h-12 flex items-end gap-[2px] px-4 pointer-events-none opacity-40">
+                    {[30, 45, 20, 60, 50, 35, 70, 85, 40, 65, 90, 75].map((h, i) => (
+                      <div 
+                        key={i} 
+                        className={`flex-1 ${i % 3 === 0 ? 'bg-error' : 'bg-primary'} rounded-t-[1px]`} 
+                        style={{ height: `${h}%` }}
+                      ></div>
+                    ))}
+                  </div>
+
+                  <div className="absolute top-2 left-2 flex gap-4 text-[9px] font-mono text-on-surface-variant/80 z-20 bg-black/40 p-1 rounded backdrop-blur-sm">
+                    <span className="text-primary font-bold">O: 18,412.25</span>
+                    <span>H: 18,435.50</span>
+                    <span>L: 18,402.00</span>
+                    <span className="text-primary">C: 18,428.75</span>
                   </div>
                 </div>
               </div>
