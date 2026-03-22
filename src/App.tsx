@@ -17,16 +17,23 @@ import {
   X
 } from "lucide-react";
 
-const Navbar = ({ onApply }: { onApply: () => void }) => (
+const Navbar = ({ onApply, onNavigate }: { onApply: () => void, onNavigate: () => void }) => (
   <nav className="fixed top-0 w-full z-50 bg-[#0e0e0e]/80 backdrop-blur-xl border-b border-[#484847]/15">
     <div className="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
-      <div className="text-xl font-bold tracking-tighter text-primary uppercase font-headline cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+      <div 
+        className="text-xl font-bold tracking-tighter text-primary uppercase font-headline cursor-pointer" 
+        onClick={() => {
+          onNavigate();
+          window.location.hash = "";
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      >
         KINETIC_ROOM
       </div>
       <div className="hidden md:flex items-center gap-8">
-        <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-xs" href="#expertise">ARCHITECTURE</a>
-        <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-xs" href="#technology">THE COUNCIL</a>
-        <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-xs" href="#openFloor">THE NETWORK</a>
+        <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-xs" href="#expertise" onClick={onNavigate}>ARCHITECTURE</a>
+        <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-xs" href="#technology" onClick={onNavigate}>THE COUNCIL</a>
+        <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-xs" href="#openFloor" onClick={onNavigate}>THE NETWORK</a>
       </div>
       <div className="flex items-center gap-4">
         <button 
@@ -534,9 +541,19 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleNavigate = () => {
+    setShowApplication(false);
+  };
+
   return (
     <div className="min-h-screen bg-background text-on-surface selection:bg-primary/30 selection:text-primary scroll-smooth">
-      <Navbar onApply={() => setShowApplication(true)} />
+      <Navbar 
+        onApply={() => {
+          setShowApplication(true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }} 
+        onNavigate={handleNavigate}
+      />
       <main>
         {showApplication ? (
           <ApplicationPage onClose={() => setShowApplication(false)} />
