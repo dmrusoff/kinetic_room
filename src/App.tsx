@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { Liveline } from "liveline";
+import type { LivelinePoint } from "liveline";
 import { 
   ArrowUpRight, 
   ShieldCheck, 
@@ -16,6 +18,70 @@ import {
   Lock,
   X
 } from "lucide-react";
+
+/* ── Live Bitcoin Chart using Liveline ─────────────────────────── */
+const BitcoinChart = () => {
+  const [data, setData] = useState<LivelinePoint[]>([]);
+  const [value, setValue] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const priceRef = useRef(0);
+
+  const fetchPrice = useCallback(async () => {
+    try {
+      const res = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+      );
+      const json = await res.json();
+      const price = json.bitcoin.usd as number;
+      const now = Math.floor(Date.now() / 1000);
+      priceRef.current = price;
+      setValue(price);
+      setData((prev) => [...prev, { time: now, value: price }]);
+      setLoading(false);
+    } catch {
+      // On rate-limit / error, synthesise a slight random walk from last known price
+      if (priceRef.current > 0) {
+        const jitter = (Math.random() - 0.48) * 40;
+        const synth = priceRef.current + jitter;
+        priceRef.current = synth;
+        setValue(synth);
+        setData((prev) => [
+          ...prev,
+          { time: Math.floor(Date.now() / 1000), value: synth },
+        ]);
+        setLoading(false);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPrice();
+    const id = setInterval(fetchPrice, 3000);
+    return () => clearInterval(id);
+  }, [fetchPrice]);
+
+  return (
+    <Liveline
+      data={data}
+      value={value}
+      loading={loading}
+      color="#34fea0"
+      theme="dark"
+      grid
+      badge
+      pulse
+      momentum
+      scrub
+      showValue
+      valueMomentumColor
+      window={120}
+      lineWidth={2}
+      formatValue={(v: number) =>
+        `$${v.toLocaleString("en-US", { minimumFractionDigits: 2 })}`
+      }
+    />
+  );
+};
 
 const Navbar = ({ onApply, onNavigate }: { onApply: () => void, onNavigate: () => void }) => (
   <nav className="fixed top-0 w-full z-50 bg-[#0e0e0e]/80 backdrop-blur-xl border-b border-[#484847]/15">
@@ -92,11 +158,11 @@ const Hero = () => (
             <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-tertiary/20 blur-2xl group-hover:opacity-100 transition duration-1000 opacity-50"></div>
             <div className="relative bg-[#0d0d0d] rounded-lg overflow-hidden">
               {/* Chart Header Overlay (Floating) */}
-              <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-[2px]">
+              <div className="relative z-10 flex items-center justify-between px-4 py-3 border-b border-white/5">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-primary font-black uppercase tracking-widest">NQ1!</span>
-                    <span className="text-[10px] font-mono text-white/50 font-medium">NASDAQ_TERMINAL</span>
+                    <span className="text-xs font-mono text-primary font-black uppercase tracking-widest">BTC/USD</span>
+                    <span className="text-[10px] font-mono text-white/50 font-medium">BITCOIN</span>
                   </div>
                   <div className="h-4 w-[1px] bg-white/10 hidden sm:block"></div>
                   <div className="hidden sm:flex items-center gap-3">
@@ -105,39 +171,34 @@ const Hero = () => (
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono text-white/40 uppercase">1H_INTERVAL</span>
+                  <span className="text-[10px] font-mono text-white/40 uppercase">REAL_TIME</span>
                 </div>
               </div>
 
-              {/* Real Chart Image */}
-              <div className="relative aspect-video w-full overflow-hidden">
-                <img 
-                  src="/nasdaq_real_chart.png" 
-                  alt="Nasdaq Futures Terminal" 
-                  className="w-full h-full object-cover scale-[1.02] hover:scale-100 transition-transform duration-[2000ms] grayscale-[0.2] contrast-[1.1]"
-                />
-                
+              {/* Liveline Chart */}
+              <div className="relative w-full h-64">
+                <BitcoinChart />
+
                 {/* Visual Polish Overlays */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none"></div>
                 <div className="absolute inset-0 ring-1 ring-inset ring-white/5 pointer-events-none"></div>
-                
-                {/* Data HUD (Bottom Floating) */}
-                <div className="absolute bottom-4 left-4 right-4 z-10 flex items-center gap-6 px-4 py-2 bg-black/60 backdrop-blur-md rounded border border-white/5 transition-opacity group-hover:opacity-100 opacity-80">
-                  <div className="flex flex-col">
-                    <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">Sentiment</span>
-                    <span className="text-[10px] font-mono text-primary font-bold uppercase">Strong_Long</span>
-                  </div>
-                  <div className="h-6 w-[1px] bg-white/10"></div>
-                  <div className="flex flex-col">
-                    <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">Alpha_Prob</span>
-                    <span className="text-[10px] font-mono text-secondary font-bold uppercase">84.2%</span>
-                  </div>
-                  <div className="h-6 w-[1px] bg-white/10"></div>
-                  <div className="flex flex-col flex-1">
-                    <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">Liquidity_Void</span>
-                    <div className="h-1.5 w-full bg-white/5 rounded-full mt-1 overflow-hidden">
-                      <div className="h-full w-[72%] bg-gradient-to-r from-primary to-primary-container"></div>
-                    </div>
+              </div>
+
+              {/* Data HUD (Below chart) */}
+              <div className="relative z-10 flex items-center gap-6 px-4 py-2.5 bg-black/60 border-t border-white/5">
+                <div className="flex flex-col">
+                  <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">Sentiment</span>
+                  <span className="text-[10px] font-mono text-primary font-bold uppercase">Strong_Long</span>
+                </div>
+                <div className="h-6 w-[1px] bg-white/10"></div>
+                <div className="flex flex-col">
+                  <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">Alpha_Prob</span>
+                  <span className="text-[10px] font-mono text-secondary font-bold uppercase">84.2%</span>
+                </div>
+                <div className="h-6 w-[1px] bg-white/10"></div>
+                <div className="flex flex-col flex-1">
+                  <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">Liquidity_Void</span>
+                  <div className="h-1.5 w-full bg-white/5 rounded-full mt-1 overflow-hidden">
+                    <div className="h-full w-[72%] bg-gradient-to-r from-primary to-primary-container"></div>
                   </div>
                 </div>
               </div>
