@@ -74,6 +74,8 @@ const BitcoinChart = () => {
       scrub
       showValue
       valueMomentumColor
+      degen={true}
+      exaggerate={true}
       window={120}
       lineWidth={2}
       formatValue={(v: number) =>
