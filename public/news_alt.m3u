@@ -1,0 +1,21 @@
+#EXTM3U
+#EXTINF:-1 xui-id="{XUI_ID}" tvg-id="CNBC.us" tvg-name="US | CNBC News" tvg-logo="https://i.ibb.co/JQG9LTv/CNBC.png" group-title="USA NEWS",US | CNBC News
+https://thetv.to:443/live/922307214/44653829/946.m3u8
+#EXTINF:-1 xui-id="{XUI_ID}" tvg-id="" tvg-name="Carib-AMP | CNBC" tvg-logo="" group-title="CARIBBEAN / CURACAO AMP",Carib-AMP | CNBC
+https://thetv.to:443/live/922307214/44653829/427733.m3u8
+#EXTINF:-1 xui-id="{XUI_ID}" tvg-id="" tvg-name="FR | CNBC " tvg-logo="" group-title="FRANCE",FR | CNBC 
+https://thetv.to:443/live/922307214/44653829/251791.m3u8
+#EXTINF:-1 xui-id="{XUI_ID}" tvg-id="" tvg-name="Carib-Hub | CNBC" tvg-logo="" group-title="CARIBBEAN HUB",Carib-Hub | CNBC
+https://thetv.to:443/live/922307214/44653829/594543.m3u8
+#EXTINF:-1 xui-id="{XUI_ID}" tvg-id="CNBC.ca" tvg-name="CA | CNBC" tvg-logo="https://i.ibb.co/JQG9LTv/CNBC.png" group-title="CANADA ENTERTAINMENT",CA | CNBC
+https://thetv.to:443/live/922307214/44653829/21013.m3u8
+#EXTINF:-1 xui-id="{XUI_ID}" tvg-id="CNBC.us" tvg-name="US | CNBC" tvg-logo="https://archive.org/download/LogoGoC/82-CNBC.png" group-title="USA ENTERTAINMENT",US | CNBC
+https://thetv.to:443/live/922307214/44653829/16108.m3u8
+#EXTINF:-1 xui-id="{XUI_ID}" tvg-id="" tvg-name="Carib-AMP | Fox News" tvg-logo="" group-title="CARIBBEAN / CURACAO AMP",Carib-AMP | Fox News
+https://thetv.to:443/live/922307214/44653829/427748.m3u8
+#EXTINF:-1 xui-id="{XUI_ID}" tvg-id="" tvg-name="Carib-Hub | Fox News" tvg-logo="" group-title="CARIBBEAN HUB",Carib-Hub | Fox News
+https://thetv.to:443/live/922307214/44653829/594511.m3u8
+#EXTINF:-1 xui-id="{XUI_ID}" tvg-id="FoxNewsChannel.us" tvg-name="US | Fox News Channel" tvg-logo="https://i.ibb.co/cXmWW9p/FoxNews.png" group-title="USA NEWS",US | Fox News Channel
+https://thetv.to:443/live/922307214/44653829/407469.m3u8
+#EXTINF:-1 xui-id="{XUI_ID}" tvg-id="FoxNewsChannel.ca" tvg-name="CA | FOX News" tvg-logo="https://i.ibb.co/cXmWW9p/FoxNews.png" group-title="CANADA ENTERTAINMENT",CA | FOX News
+https://thetv.to:443/live/922307214/44653829/107310.m3u8
