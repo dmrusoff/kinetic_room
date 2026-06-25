@@ -1,0 +1,3 @@
+#EXTM3U
+#EXTINF:-1 xui-id="{XUI_ID}" tvg-id="CNBC.us" tvg-name="US | CNBC News" tvg-logo="https://i.ibb.co/JQG9LTv/CNBC.png" group-title="USA NEWS",US | CNBC News
+https://primexclusive.day:443/live/922307214/44653829/946.m3u8
