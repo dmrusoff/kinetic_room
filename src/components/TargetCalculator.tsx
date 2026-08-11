@@ -9,7 +9,7 @@ interface ContractSpec {
   tickSize: number;
   tickValue: number;
   decimals: number;
-  defaultPrice: number;
+  defaultPrice: string;
 }
 
 const CONTRACT_SPECS: Record<string, ContractSpec> = {
@@ -20,7 +20,7 @@ const CONTRACT_SPECS: Record<string, ContractSpec> = {
     tickSize: 0.25,
     tickValue: 0.50,
     decimals: 2,
-    defaultPrice: 19500.00
+    defaultPrice: '19500.00'
   },
   NQ: {
     symbol: 'NQ',
@@ -29,7 +29,7 @@ const CONTRACT_SPECS: Record<string, ContractSpec> = {
     tickSize: 0.25,
     tickValue: 5.00,
     decimals: 2,
-    defaultPrice: 19500.00
+    defaultPrice: '19500.00'
   },
   MES: {
     symbol: 'MES',
@@ -38,7 +38,7 @@ const CONTRACT_SPECS: Record<string, ContractSpec> = {
     tickSize: 0.25,
     tickValue: 1.25,
     decimals: 2,
-    defaultPrice: 5500.00
+    defaultPrice: '5500.00'
   },
   ES: {
     symbol: 'ES',
@@ -47,34 +47,45 @@ const CONTRACT_SPECS: Record<string, ContractSpec> = {
     tickSize: 0.25,
     tickValue: 12.50,
     decimals: 2,
-    defaultPrice: 5500.00
+    defaultPrice: '5500.00'
   }
 };
 
 export const TargetCalculator = () => {
   const [symbol, setSymbol] = useState<'MNQ' | 'NQ' | 'MES' | 'ES'>('MNQ');
   const [direction, setDirection] = useState<'BUY' | 'SELL'>('BUY');
-  const [avgPrice, setAvgPrice] = useState<number>(19500.00);
-  const [lotSize, setLotSize] = useState<number>(2);
-  const [targetProfit, setTargetProfit] = useState<number>(500);
+  const [avgPriceStr, setAvgPriceStr] = useState<string>('19500.00');
+  const [lotSizeStr, setLotSizeStr] = useState<string>('2');
+  const [targetProfitStr, setTargetProfitStr] = useState<string>('500');
 
   const spec = CONTRACT_SPECS[symbol];
+
+  // Clean leading zeros helper
+  const cleanNumberInput = (val: string) => {
+    if (val === '') return '';
+    // Strip leading zeros before non-zero digits (allow "0.25" or "0")
+    if (val.length > 1 && val.startsWith('0') && !val.startsWith('0.')) {
+      return val.replace(/^0+(?=\d)/, '');
+    }
+    return val;
+  };
 
   // Handle instrument change & default price suggestion
   const handleSymbolChange = (newSymbol: 'MNQ' | 'NQ' | 'MES' | 'ES') => {
     setSymbol(newSymbol);
+    const currentPriceNum = parseFloat(avgPriceStr) || 0;
     if (newSymbol === 'ES' || newSymbol === 'MES') {
-      if (avgPrice > 10000) setAvgPrice(5500.00);
+      if (currentPriceNum > 10000) setAvgPriceStr('5500.00');
     } else {
-      if (avgPrice < 10000) setAvgPrice(19500.00);
+      if (currentPriceNum < 10000) setAvgPriceStr('19500.00');
     }
   };
 
   // Dynamic calculations
   const calculations = useMemo(() => {
-    const validLots = Math.max(1, lotSize || 1);
-    const validProfit = Math.max(0, targetProfit || 0);
-    const validPrice = avgPrice || 0;
+    const validLots = Math.max(1, parseInt(lotSizeStr) || 1);
+    const validProfit = Math.max(0, parseFloat(targetProfitStr) || 0);
+    const validPrice = parseFloat(avgPriceStr) || 0;
 
     const totalPointVal = validLots * spec.pointValue;
     const totalTickVal = validLots * spec.tickValue;
@@ -92,7 +103,7 @@ export const TargetCalculator = () => {
       totalPointVal,
       totalTickVal
     };
-  }, [symbol, direction, avgPrice, lotSize, targetProfit, spec]);
+  }, [symbol, direction, avgPriceStr, lotSizeStr, targetProfitStr, spec]);
 
   const formatCurrency = (val: number) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
@@ -104,7 +115,7 @@ export const TargetCalculator = () => {
     }).format(val);
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-6 py-12">
+    <div className="w-full max-w-6xl mx-auto px-6 py-8">
       {/* Header */}
       <div className="text-center mb-12">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#121212] border border-[#00F2FF]/30 mb-4 shadow-[0_0_15px_rgba(0,242,255,0.15)]">
@@ -206,8 +217,9 @@ export const TargetCalculator = () => {
                   <input
                     type="number"
                     step="0.25"
-                    value={avgPrice}
-                    onChange={(e) => setAvgPrice(parseFloat(e.target.value) || 0)}
+                    value={avgPriceStr}
+                    onFocus={(e) => e.target.select()}
+                    onChange={(e) => setAvgPriceStr(cleanNumberInput(e.target.value))}
                     className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg pl-7 pr-3 py-2.5 font-mono text-sm text-white focus:outline-none focus:border-[#00F2FF] focus:shadow-[0_0_15px_rgba(0,242,255,0.3)] transition-colors"
                   />
                 </div>
@@ -222,8 +234,9 @@ export const TargetCalculator = () => {
                     type="number"
                     min="1"
                     step="1"
-                    value={lotSize}
-                    onChange={(e) => setLotSize(parseInt(e.target.value) || 1)}
+                    value={lotSizeStr}
+                    onFocus={(e) => e.target.select()}
+                    onChange={(e) => setLotSizeStr(cleanNumberInput(e.target.value))}
                     className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-3 py-2.5 font-mono text-sm text-white focus:outline-none focus:border-[#00F2FF] focus:shadow-[0_0_15px_rgba(0,242,255,0.3)] transition-colors"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-white/40 text-xs uppercase">lots</span>
@@ -242,8 +255,9 @@ export const TargetCalculator = () => {
                   type="number"
                   min="1"
                   step="10"
-                  value={targetProfit}
-                  onChange={(e) => setTargetProfit(parseFloat(e.target.value) || 0)}
+                  value={targetProfitStr}
+                  onFocus={(e) => e.target.select()}
+                  onChange={(e) => setTargetProfitStr(cleanNumberInput(e.target.value))}
                   className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg pl-7 pr-3 py-2.5 font-mono text-base font-bold text-white focus:outline-none focus:border-[#00F2FF] focus:shadow-[0_0_15px_rgba(0,242,255,0.3)] transition-colors"
                 />
               </div>
@@ -256,7 +270,7 @@ export const TargetCalculator = () => {
                     <button
                       key={amount}
                       type="button"
-                      onClick={() => setTargetProfit(amount)}
+                      onClick={() => setTargetProfitStr(amount.toString())}
                       className="py-1 px-2 bg-white/5 border border-white/10 rounded font-mono text-[11px] text-white/70 hover:text-[#00F2FF] hover:border-[#00F2FF]/50 transition-colors"
                     >
                       ${amount.toLocaleString()}
