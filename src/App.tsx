@@ -7,12 +7,13 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Liveline } from "liveline";
 import type { LivelinePoint } from "liveline";
-import { 
-  ArrowUpRight, 
-  ShieldCheck, 
-  Radio, 
-  Terminal, 
-  TrendingUp, 
+import { TargetCalculator } from "./components/TargetCalculator";
+import {
+  ArrowUpRight,
+  ShieldCheck,
+  Radio,
+  Terminal,
+  TrendingUp,
   ArrowLeft,
   CheckCircle2,
   Lock,
@@ -85,11 +86,11 @@ const BitcoinChart = () => {
   );
 };
 
-const Navbar = ({ onApply, onNavigate }: { onApply: () => void, onNavigate: () => void }) => (
+const Navbar = ({ onApply, onNavigate, onShowCalc }: { onApply: () => void, onNavigate: () => void, onShowCalc: () => void }) => (
   <nav className="fixed top-0 w-full z-50 bg-[#0e0e0e]/80 backdrop-blur-xl border-b border-[#484847]/15">
     <div className="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
-      <div 
-        className="text-xl font-bold tracking-tighter text-primary uppercase font-headline cursor-pointer" 
+      <div
+        className="text-xl font-bold tracking-tighter text-primary uppercase font-headline cursor-pointer"
         onClick={() => {
           onNavigate();
           window.location.hash = "";
@@ -102,9 +103,10 @@ const Navbar = ({ onApply, onNavigate }: { onApply: () => void, onNavigate: () =
         <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-xs" href="#expertise" onClick={onNavigate}>ARCHITECTURE</a>
         <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-xs" href="#technology" onClick={onNavigate}>THE COUNCIL</a>
         <a className="text-on-surface-variant hover:text-white transition-colors font-headline tracking-tight font-medium text-xs" href="#openFloor" onClick={onNavigate}>THE NETWORK</a>
+        <button className="text-primary hover:text-white transition-colors font-headline tracking-tight font-bold text-xs uppercase" onClick={onShowCalc}>CALCULATOR</button>
       </div>
       <div className="flex items-center gap-4">
-        <button 
+        <button
           onClick={onApply}
           className="bg-gradient-to-br from-primary to-primary-container text-background font-headline font-bold text-xs px-5 py-2.5 rounded hover:scale-95 active:scale-90 transition-transform tracking-tight uppercase"
         >
@@ -120,7 +122,7 @@ const Hero = () => (
     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background pointer-events-none"></div>
     <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
       <div className="grid lg:grid-cols-12 gap-12 items-center">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -134,13 +136,13 @@ const Hero = () => (
             <span className="text-[10px] uppercase tracking-widest font-label font-bold text-on-surface-variant">Live Market Nexus Active</span>
           </div>
           <h1 className="font-headline text-5xl md:text-7xl font-bold tracking-tighter leading-[0.9] mb-8">
-            NAVIGATE <span className="text-primary italic">MOMENTUM</span> <br/>WITH PRECISION.
+            NAVIGATE <span className="text-primary italic">MOMENTUM</span> <br />WITH PRECISION.
           </h1>
           <p className="text-on-surface-variant text-lg md:text-xl max-w-xl mb-10 leading-relaxed font-light">
             Collaborative futures trading engineered for maximum speed. Join an elite collective of veteran traders leveraging proprietary momentum data.
           </p>
           <div className="flex flex-wrap gap-4">
-            <button 
+            <button
               onClick={() => (window as any).toggleApplication?.()}
               className="bg-primary text-background font-headline font-bold px-8 py-4 flex items-center gap-3 rounded-sm hover:opacity-90 transition-all shadow-[0_4px_14px_0_rgba(52,254,160,0.39)]"
             >
@@ -149,8 +151,8 @@ const Hero = () => (
             </button>
           </div>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.2 }}
@@ -221,7 +223,7 @@ const Pillars = () => (
       </div>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto">
         {/* Pillar: Experience */}
-        <motion.div 
+        <motion.div
           whileHover={{ borderColor: "rgba(52, 254, 160, 0.2)" }}
           className="md:col-span-8 bg-surface-container-low rounded-xl p-8 flex flex-col justify-between border border-outline-variant/5 transition-all group overflow-hidden relative"
         >
@@ -246,7 +248,7 @@ const Pillars = () => (
         </motion.div>
 
         {/* Pillar: Real-Time News */}
-        <motion.div 
+        <motion.div
           id="newsFeed"
           whileHover={{ borderColor: "rgba(143, 245, 255, 0.2)" }}
           className="md:col-span-4 bg-surface-container-high rounded-xl p-8 flex flex-col justify-between border border-outline-variant/5 transition-all group overflow-hidden relative"
@@ -272,7 +274,7 @@ const Pillars = () => (
         </motion.div>
 
         {/* Pillar: Technology */}
-        <motion.div 
+        <motion.div
           whileHover={{ borderColor: "rgba(185, 132, 255, 0.2)" }}
           className="md:col-span-4 bg-surface-container-low rounded-xl p-8 flex flex-col justify-between border border-outline-variant/5 transition-all group"
         >
@@ -293,7 +295,7 @@ const Pillars = () => (
         </motion.div>
 
         {/* Pillar: Market Momentum */}
-        <motion.div 
+        <motion.div
           whileHover={{ borderColor: "rgba(52, 254, 160, 0.2)" }}
           className="md:col-span-8 bg-surface-container-highest rounded-xl p-8 flex flex-col md:flex-row gap-8 items-center border border-outline-variant/5 transition-all group relative overflow-hidden"
         >
@@ -330,7 +332,7 @@ const Council = () => (
       <div className="grid lg:grid-cols-2 gap-16 items-center">
         <div>
           <h2 className="font-headline text-xs font-bold tracking-[0.2em] text-primary uppercase mb-4">The Strategic Council</h2>
-          <h3 className="font-headline text-4xl font-bold tracking-tighter mb-8 leading-none">VETERAN INSIGHT.<br/>TECHNICAL MASTERY.</h3>
+          <h3 className="font-headline text-4xl font-bold tracking-tighter mb-8 leading-none">VETERAN INSIGHT.<br />TECHNICAL MASTERY.</h3>
           <p className="text-on-surface-variant mb-10 text-lg font-light leading-relaxed">
             The KINETIC_ROOM is steered by a cohort of technical masters who have redefined market engagement—from the Forex volatility peaks of 2020 to today's AI-driven systemic liquidity environments. We don't just trade; we build the systems that extract value from global flow.
           </p>
@@ -353,9 +355,9 @@ const Council = () => (
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="aspect-[3/4] rounded-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 relative group">
-            <img 
-              className="w-full h-full object-cover" 
-              src="/marcus_v_white.png" 
+            <img
+              className="w-full h-full object-cover"
+              src="/marcus_v_white.png"
               referrerPolicy="no-referrer"
               alt="Marcus V."
             />
@@ -365,9 +367,9 @@ const Council = () => (
             </div>
           </div>
           <div className="aspect-[3/4] rounded-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 relative group lg:mt-12">
-            <img 
-              className="w-full h-full object-cover" 
-              src="/jaxson_r_white.png" 
+            <img
+              className="w-full h-full object-cover"
+              src="/jaxson_r_white.png"
               referrerPolicy="no-referrer"
               alt="Jaxson R."
             />
@@ -390,7 +392,7 @@ const CTA = () => (
         <h2 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter mb-8 leading-tight">THE FLOOR IS <span className="text-primary italic">OPEN</span>.</h2>
         <p className="text-on-surface-variant text-lg mb-12 font-light">Applications for the KINETIC_ROOM are currently being processed. Enter your details to be considered for our elite trading collective.</p>
         <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-          <button 
+          <button
             onClick={() => (window as any).toggleApplication?.()}
             className="w-full md:w-auto bg-gradient-to-br from-primary to-primary-container text-background font-headline font-extrabold px-12 py-5 rounded-sm text-lg hover:shadow-[0_0_30px_rgba(52,254,160,0.39)] transition-all flex items-center justify-center gap-3 group"
           >
@@ -422,7 +424,7 @@ const Footer = ({ onOpenLegal }: { onOpenLegal: (type: string) => void }) => (
 );
 
 const LegalModal = ({ title, onClose }: { title: string, onClose: () => void }) => (
-  <motion.div 
+  <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
@@ -451,7 +453,7 @@ const ApplicationPage = ({ onClose }: { onClose: () => void }) => {
   if (submitted) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-6">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="max-w-md w-full text-center"
@@ -461,7 +463,7 @@ const ApplicationPage = ({ onClose }: { onClose: () => void }) => {
           </div>
           <h2 className="font-headline text-3xl font-bold mb-4 tracking-tighter">APPLICATION RECEIVED.</h2>
           <p className="text-on-surface-variant mb-12">Our council will review your profile. If you meet the criteria, an encrypted channel will be opened.</p>
-          <button 
+          <button
             onClick={onClose}
             className="text-primary font-headline font-bold text-sm tracking-widest uppercase hover:underline"
           >
@@ -475,20 +477,20 @@ const ApplicationPage = ({ onClose }: { onClose: () => void }) => {
   return (
     <div className="min-h-screen bg-background pt-32 pb-20 px-6">
       <div className="max-w-2xl mx-auto">
-        <button 
+        <button
           onClick={onClose}
           className="flex items-center gap-2 text-on-surface-variant hover:text-white mb-12 transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span className="font-headline text-xs font-bold tracking-widest uppercase">Go Back</span>
         </button>
-        
+
         <div className="mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-surface-container-high border border-outline-variant/20 mb-6 font-mono text-[10px] text-tertiary">
             <Lock className="w-3 h-3" />
             SECURE_SESSION: ACTIVE
           </div>
-          <h2 className="font-headline text-5xl font-bold tracking-tighter mb-4">MEMBERSHIP<br/><span className="text-primary italic">APPLICATION.</span></h2>
+          <h2 className="font-headline text-5xl font-bold tracking-tighter mb-4">MEMBERSHIP<br /><span className="text-primary italic">APPLICATION.</span></h2>
           <p className="text-on-surface-variant font-light text-lg">Provide your professional background for vetting.</p>
         </div>
 
@@ -513,7 +515,7 @@ const ApplicationPage = ({ onClose }: { onClose: () => void }) => {
               </select>
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-on-surface-variant px-1">Trading Experience / Background</label>
             <textarea required rows={4} className="w-full bg-surface-container-low border border-outline-variant/10 rounded-sm px-4 py-3 focus:border-primary/40 focus:outline-none transition-all font-mono text-sm resize-none" placeholder="Describe your experience with volatility-based systems and order flow..." />
@@ -535,31 +537,57 @@ const ApplicationPage = ({ onClose }: { onClose: () => void }) => {
 };
 
 export default function App() {
-  const [showApplication, setShowApplication] = useState(false);
+  const [view, setView] = useState<'home' | 'calc' | 'application'>(() => {
+    if (window.location.pathname.startsWith('/calc') || window.location.hash === '#calc') {
+      return 'calc';
+    }
+    return 'home';
+  });
   const [legalModal, setLegalModal] = useState<string | null>(null);
-  
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#calc' || window.location.pathname.startsWith('/calc')) {
+        setView('calc');
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   // Expose toggle to hero/CTA buttons
   (window as any).toggleApplication = () => {
-    setShowApplication(true);
+    setView('application');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleNavigate = () => {
-    setShowApplication(false);
+    setView('home');
+  };
+
+  const handleShowCalc = () => {
+    setView('calc');
+    window.location.hash = '#calc';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <div className="min-h-screen bg-background text-on-surface selection:bg-primary/30 selection:text-primary scroll-smooth">
-      <Navbar 
-        onApply={() => {
-          setShowApplication(true);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }} 
-        onNavigate={handleNavigate}
-      />
-      <main>
-        {showApplication ? (
-          <ApplicationPage onClose={() => setShowApplication(false)} />
+      {view !== 'calc' && (
+        <Navbar
+          onApply={() => {
+            setView('application');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          onNavigate={handleNavigate}
+          onShowCalc={handleShowCalc}
+        />
+      )}
+      <main className={view === 'calc' ? 'py-8' : 'pt-16'}>
+        {view === 'application' ? (
+          <ApplicationPage onClose={() => setView('home')} />
+        ) : view === 'calc' ? (
+          <TargetCalculator />
         ) : (
           <>
             <Hero />
@@ -569,8 +597,8 @@ export default function App() {
           </>
         )}
       </main>
-      <Footer onOpenLegal={setLegalModal} />
-      
+      {view !== 'calc' && <Footer onOpenLegal={setLegalModal} />}
+
       <AnimatePresence>
         {legalModal && (
           <LegalModal title={legalModal} onClose={() => setLegalModal(null)} />
