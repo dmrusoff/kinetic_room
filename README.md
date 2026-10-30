@@ -1,20 +1,39 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# ⚡ KINETIC_ROOM — Trading Room UI & Futures Execution Tools
 
-# Run and deploy your AI Studio app
+An AI-assisted web design and interactive UI prototype for an institutional-style futures trading room, combining real-time price telemetry with built-in contract risk and profit-target calculators.
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/513b5db3-f0c3-4284-b258-cde0c4a855f3
+## ✨ Key Features
 
-## Run Locally
+### 1. Futures Target & Tick Calculator (`src/components/TargetCalculator.tsx`)
+Interactive position-sizing and target-price calculator tailored for CME index futures:
+- **Supported Contracts**:
+  - **MNQ** (*Micro E-mini Nasdaq-100* — `$2.00/pt`, `$0.50/tick`)
+  - **NQ** (*E-mini Nasdaq-100* — `$20.00/pt`, `$5.00/tick`)
+  - **MES** (*Micro E-mini S&P 500* — `$5.00/pt`, `$1.25/tick`)
+  - **ES** (*E-mini S&P 500* — `$50.00/pt`, `$12.50/tick`)
+- **Real-Time Target Computation**: Calculates exact exit prices, required points, and tick distances for `BUY` (Long) and `SELL` (Short) positions given an entry price, contract lot size, and dollar profit target.
 
-**Prerequisites:**  Node.js
+### 2. Live Streaming Market Telemetry (`src/App.tsx`)
+- **Real-Time Tick Charting**: Powered by `Liveline` with momentum color transitions, interactive scrubbing, and automatic fallback simulation if external price APIs rate-limit.
+- **Trading Room Interface**: High-contrast dark-mode kinetic UI with smooth layout transitions (`Motion`), live market news stream integration, and modular tool drawers.
 
+---
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 🛠️ Tech Stack
+
+- **Frontend**: React 19, TypeScript, Tailwind CSS 4
+- **Animation & Charting**: Motion (`motion/react`), `liveline`, Lucide Icons
+- **Build Tooling**: Vite 6
+
+---
+
+## 🚀 Getting Started
+
+```bash
+git clone https://github.com/dmrusoff/kinetic_room.git
+cd kinetic_room
+npm install
+npm run dev
+```
